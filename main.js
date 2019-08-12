@@ -6,17 +6,24 @@ let clack;
 let a;
 let b;
 let stop = true;
+document.querySelector('button').addEventListener('click', function () {
+  clack = new Audio('./clack.wav');
+  clack.play();
+  gameStart();
+
+
+});
+
 function gameStart() {
   init();
-  preload();
-  a = new flash(150, 20, 0, 1);
-  b = new flash(250, 50, - 3, 100);
+
+  a = new flash(150, 20, 0, 100);
+  b = new flash(250, 120, - 3, 500000);
+  c = new flash(390, 50, 5, 5002);
   updates();
+
 }
 
-function preload() {
-  clack = new Audio('./clack.waw');
-}
 
 function updates() {
 
@@ -25,21 +32,39 @@ function updates() {
   if (a.collide(b)) {
     const v1 = a.bounce(b);
     const v2 = b.bounce(a);
+
     clack.play();
     a.v = v1;
     b.v = v2;
   }
-  if (a.hitwall())
+  if (c.collide(b)) {
+    const v3 = c.bounce(b);
+    const v4 = b.bounce(c);
+
+    clack.play();
+    c.v = v3;
+    b.v = v4;
+  }
+  if (a.hitwall()) {
     a.v *= -1;
-  if (b.hitwall())
+    clack.play();
+  }
+  if (b.hitwall()) {
     b.v *= -1;
+    clack.play();
+  }
+  if (c.hitwall()) {
+    c.v *= -1;
+    clack.play();
+  }
+
 
   a.update();
   b.update();
-
+  c.update();
   a.show();
   b.show();
-
+  c.show();
   requestAnimationFrame(updates);
 }
 function init() {
@@ -85,5 +110,4 @@ class flash {
   }
 }
 
-gameStart();
 
