@@ -1,14 +1,20 @@
-title{
-    color: Pink; 
-    font-family: "Courier";
-    font-size: 20px;
-    margin: 10px 0 0 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 30em;
-    animation: type 4s steps(60, end); 
-  }
-  
-  @keyframes type{ 
-    from { width: 0; } 
-  } 
+canvas{
+  background: #AAAAAA;
+}
+canvas {
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin:auto;
+}
+.header p{
+font-family: "montserrat";
+font-size: 50px;
+text-align: center;
+}
+
+body{ 
+background: #3D4970;
+}
