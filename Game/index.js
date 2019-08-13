@@ -12,6 +12,7 @@ let img;
 let back;
 let movei = 0;
 let spd = 2;
+let bad;
 
 let rateFire = 10;
 let k = 0;
@@ -40,6 +41,8 @@ function init() {
     img.src = './billie.png';
     back = new Image();
     back.src = './migos.png';
+    bad = new Audio();
+    bad.src = "./bad guy.mp3";
 
     setInterval(createEnemy, 500);
     setInterval(createBullet, 5);
@@ -50,6 +53,7 @@ function init() {
         }
 
     }, 5);
+    setInterval(bad.play(), 205000);
     mousemov();
 }
 
