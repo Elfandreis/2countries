@@ -2,15 +2,16 @@ let canvas;
 let ctx;
 let border = 500;
 let clack;
-
+let billy;
 let a;
 let b;
-let stop = true;
+
 document.querySelector('button').addEventListener('click', function () {
   clack = new Audio('./clack.wav');
+  billy = new Audio("./bad guy.mp3");
   clack.play();
+  billy.play();
   gameStart();
-
 
 });
 
