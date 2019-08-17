@@ -1,88 +1,83 @@
 let canvas;
 let ctx;
+
 let pl;
-let enemies = [];
-let point;
-let score = 0;
-let mouse = {};
 let bullets = [];
-let gameStop = false;
-let hearts = 3;
-let img;
-let back;
+let enemies = [];
+let point = new prize(50, 50);
+
+let mouse = {};
+let escores = [];
+
+let pause = false;
+
 let movei = 0;
-let spd = 2;
-let bad;
 
-let rateFire = 10;
-let k = 0;
+let vb = 5;
 
+var ui = {
+    score: 0,
+    hearts: 3,
+    backy: 0,
+    printscore: function () {
+        ctx.fillStyle = "black";
+        ctx.textAlign = "left";
+        ctx.font = "40px Georgia"
+        ctx.fillText('Score ' + this.score + ' ', 270, 40);
+    },
+    printheart: function () {
+        if (this.hearts <= 0) {
+            pause = true;
+            Timers(pause);
+            ctx.drawImage(images.milos, 0, 0, canvas.width, canvas.height);
+        }
+        for (let i = 0; i < this.hearts; i++)
+            ctx.drawImage(images.heart, i * 75 + 10, 10, 50, 50);
+    },
+    background: function () {
+        this.backy++;
+        ctx.drawImage(images.back, 0, this.backy, canvas.width, canvas.height);
+        ctx.drawImage(images.back, 0, (-canvas.height) + this.backy, canvas.width, canvas.height);
+        if (this.backy > canvas.height) {
+            this.backy = 0;
+        }
+    },
+    diescore: function (obj) {
+        ctx.font = 30 + "px Verdana";
+        ctx.fillStyle = "rgba(255, 0, 0," + obj.op + ")";
+        ctx.textAlign = "center";
+        ctx.fillText(obj.score, obj.x + obj.w / 2, obj.y + obj.h / 2);
+    }
+};
 
 document.querySelector('button').addEventListener('click', function () {
     let bt = document.getElementById("start");
     bt.style.display = "none";
-
     gameStart();
 });
 
 
 function gameStart() {
     init();
+    listener();
     window.requestAnimationFrame(loop);
 }
 
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    pl = new player(250, 800, 100, 100);
 
-    pl = new player(20, 20, 100, 100);
-    point = new points(50, 50);
-    img = new Image();
-    img.src = './billie.png';
-    back = new Image();
-    back.src = './migos.png';
-    bad = new Audio();
-    bad.src = "./bad guy.mp3";
-
-    setInterval(createEnemy, 500);
-    setInterval(createBullet, 5);
-    setInterval(function () {
-        movei += spd;
-        if (movei > 00 || movei < -200) {
-            spd *= -1;
-        }
-
-    }, 5);
-    setInterval(bad.play(), 205000);
-    mousemov();
+    audio[0].play();
+    Mousemov();
+    Timers(false);
 }
 
 function loop() {
-
-    if (gameStop == false) {
-
-        score++;
-
+    if (pause == false) {
         update();
-        for (let j = 0; j < enemies.length; j++) {
-            if (collision(pl, enemies[j]) && pl.invi == false) {
-                hearts--;
-                pl.invi = true;
-                setTimeout(function () { pl.invi = false; }, 400);
-            }
-
-            collision(pl, point);
-
-            for (let i = 0; i < bullets.length && enemies[j] != undefined; i++) {
-                if (collision(bullets[i], enemies[j])) {
-
-                    enemies.splice(j, 1);
-                }
-            }
-        }
+        collisions();
         draw();
-        // if (hearts <= 0)
-        //     gameStop = true;
     }
     window.requestAnimationFrame(loop);
 }
@@ -90,19 +85,15 @@ function loop() {
 
 function update() {
 
-    pl.x = mouse.x - pl.w / 2;
-    pl.y = mouse.y - pl.h / 2;
-
+    pl.update();
     point.update();
-
-    // createBullet();
-
     for (let i = 0; i < bullets.length; i++) {
         bullets[i].update();
         if (bullets[i].hitupper()) {
             bullets.splice(i, 1);
         }
     }
+
     for (let i = 0; i < enemies.length; i++) {
         enemies[i].update();
         if (enemies[i].hitbottom()) {
@@ -111,60 +102,73 @@ function update() {
     }
 }
 
+function collisions() {
+    if (collision(pl, point)) {
+        ui.score += 1000;
+        point.delay();
+    }
+    for (let j = 0; j < enemies.length; j++) {
+        if (collision(pl, enemies[j]) && pl.invi == false) {
+            ui.hearts--;
+            pl.invis();
+            enemies.splice(j, 1);
+        }
+    }
+    arraycollis(bullets, enemies);
+}
 
 function draw() {
     ctx.clearRect(0, 0, 500, 800);
-    ctx.drawImage(back, movei, 200)
-    pl.draw();
 
-    point.draw();
-    heart();
+    ui.background();
+
     for (let i = 0; i < enemies.length; i++) {
-        enemies[i].draw();
+        enemies[i].draw(images.xxxt);
     }
+
+
     for (let i = 0; i < bullets.length; i++) {
-        bullets[i].draw();
+        bullets[i].draw(images.bullet);
+
     }
-    Score();
 
+    for (let i = 0; i < escores.length; i++) {
+        if (escores[i].op > 0) {
+            escores[i].op -= 0.01;
+            ui.diescore(escores[i]);
+        }
+        else {
+            escores.splice(i, 1);
+        }
+    }
+    point.draw(images.prize);
+    pl.draw(images.billie);
+
+    ui.printheart();
+    ui.printscore();
 }
 
+function listener() {
 
+    window.addEventListener('blur', function (e) {
+        pause = true;
+        Timers(pause);
+    });
 
-document.onkeydown = function (e) {
-    gameStop = !gameStop;
-}
+    window.addEventListener("keydown", function (e) {
+        if (e.keyCode == 32) {
+            pause = !pause;
+            Timers(pause);
+        }
+    });
 
-function mousemov() {
-    document.addEventListener('mousemove', function (e) {  // use event argument
-        var rect = canvas.getBoundingClientRect();  // get element's abs. position
-        mouse.x = e.clientX - rect.left;              // get mouse x and adjust for el.
-        mouse.y = e.clientY - rect.top;               // get mouse y and adjust for el.
+    canvas.addEventListener("mousedown", function () {
+        vb = 10;
+        ratefire = 125;
+    });
+    canvas.addEventListener("mouseup", function () {
+        vb = 5;
+        ratefire = 250;
     });
 }
-function createBullet() {
-    let Bullet = new bullet(pl, 10);
-    bullets.push(Bullet);
-}
 
-function createEnemy() {
-    let Enemy = new enemy(50, 50);
-    enemies.push(Enemy);
-}
-
-function Score() {
-    ctx.font = "30px Verdana";
-    ctx.fillStyle = "black";
-    ctx.fillText('Score ' + score, 250, 40);
-    ctx.textAlign = "center";
-}
-
-function heart() {
-    for (let i = 0; i < hearts; i++)
-        ctx.fillRect(i * 100, 1, 50, 50);
-}
-
-function collision(box1, box2) {
-    return (((box1.x + box1.w > box2.x && box1.x < box2.x + box2.w) || (box1.x + box1.w < box2.w && box1.w > box2.x))
-        && ((box1.y + box1.h > box2.y && box1.y < box2.y + box2.h) || (box1.y + box1.h < box2.h && box1.h > box2.y)));
-}
