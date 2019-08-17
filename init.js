@@ -38,7 +38,7 @@ function Timers(pause) {
 }
 
 function preloadImages() {
-    let imageList = ["/img/player.png", "/img/mi.png", "./img/xxxt.png", "./img/bullet.png", "./img/heart.png", "./img/milos.png", "./img/prize.png", "./img/back.png"];
+    let imageList = ["./img/player.png", "./img/mi.png", "./img/xxxt.png", "./img/bullet.png", "./img/heart.png", "./img/milos.png", "./img/prize.png", "./img/back.png"];
     let imagename = ["billie", "migos", "xxxt", "bullet", "heart", "milos", "prize", "back"];
 
     for (let i = 0; i < imageList.length; i++) {
