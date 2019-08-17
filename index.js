@@ -15,6 +15,25 @@ let movei = 0;
 
 let vb = 5;
 
+
+//frame counters fps
+const times = [];
+let fps;
+
+function refreshLoop() {
+    window.requestAnimationFrame(() => {
+        const now = performance.now();
+        while (times.length > 0 && times[0] <= now - 1000) {
+            times.shift();
+        }
+        times.push(now);
+        fps = times.length;
+        refreshLoop();
+    });
+}
+
+refreshLoop();
+
 var ui = {
     score: 0,
     hearts: 16,
@@ -23,7 +42,7 @@ var ui = {
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
         ctx.font = "40px Georgia"
-        ctx.fillText('Score ' + this.score + ' ', 270, 40);
+        ctx.fillText('Score ' + fps + ' ', 270, 40);
     },
     printheart: function () {
         if (this.hearts <= 0) {
@@ -50,6 +69,7 @@ var ui = {
     }
 };
 
+//event starter
 document.querySelector('button').addEventListener('click', function () {
     let bt = document.getElementById("start");
     bt.style.display = "none";
@@ -67,7 +87,6 @@ function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     pl = new player(250, 800, 100, 100);
-
     audio[0].play();
     Mousemov();
     Timers(false);
@@ -146,6 +165,7 @@ function draw() {
 
     ui.printheart();
     ui.printscore();
+
 }
 
 function listener() {
