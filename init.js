@@ -9,7 +9,7 @@ let createbullet;
 let moveimage;
 
 let rateenem = 500;
-let ratefire = 500;
+let ratefire = 250;
 
 let timers = {
     pause: false,
@@ -39,7 +39,7 @@ function Timers(pause) {
 
 function preloadImages() {
     let imageList = ["/img/billie.png", "/img/migos.png", "./img/xxxt.png", "./img/bullet.png", "./img/heart.png", "./img/milos.png", "./img/prize.png", "./img/back.png"];
-    let imagename = ['billie', 'migos', "xxxt", "bullet", "heart", "milos", "prize", "back"];
+    let imagename = ["billie", "migos", "xxxt", "bullet", "heart", "milos", "prize", "back"];
 
     for (let i = 0; i < imageList.length; i++) {
         images[imagename[i]] = new Image();
@@ -49,7 +49,7 @@ function preloadImages() {
 function preloadAudio() {
     var audioList = ["./sound/bad guy.mp3", "./sound/skr.mp3", "./sound/bullet.mp3", "./sound/bullet2.mp3"];
     //do same thing as images
-    audio[0] = new Sound(audioList[0], 1, 1);
+    audio[0] = new Sound(audioList[0], 1, 0.7);
     audio[1] = new Sound(audioList[1], 3, 0.5);
     audio[2] = new Sound(audioList[2], 20, 1);
     audio[3] = new Sound(audioList[3], 40, 1);

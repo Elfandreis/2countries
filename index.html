@@ -1,20 +1,45 @@
 <!DOCTYPE html>
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <script src="classes.js"></script>
+
 </head>
 
 <body>
-	<header class="header">
-		<p>Hello Boys</p>
-	</header>
-	<button id="unmuteButton">Press this button to start</button>
-	<screen >
-		<canvas id="canvas" width="900" height="600"></canvas>
-		<script src="./main.js"></script>
-	</screen>
+    <header>
+        <p1>This is a game about Billie Eilis and the Snake</p1>
+    </header>
+    <game>
+
+
+        <button id="start">Press this button to start</button>
+        <button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
+        <canvas id="canvas" width="500" height="800"></canvas>
+        <script src="./init.js"></script>
+        <script src="./index.js"></script>
+        <script>
+            /* Get the element you want displayed in fullscreen mode (a video in this example): */
+            var elem = document.getElementById("canvas");
+
+            /* When the openFullscreen() function is executed, open the video in fullscreen.
+            Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
+            function openFullscreen() {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) { /* Firefox */
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                    elem.msRequestFullscreen();
+                }
+            }
+        </script>
+    </game>
+
 </body>
 
 </html>

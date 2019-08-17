@@ -17,7 +17,7 @@ let vb = 5;
 
 var ui = {
     score: 0,
-    hearts: 3,
+    hearts: 16,
     backy: 0,
     printscore: function () {
         ctx.fillStyle = "black";

@@ -1,33 +1,22 @@
 canvas{
-  background: #AAAAAA;
-}
-canvas {
-  position: absolute;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin:auto;
-}
-.header p{
-  margin: auto;
-font-family: "montserrat";
-font-size: 50px;
-text-align: center;
-background: red;
-opacity: 0.5;
-}
+   
+    padding: 0;
+    cursor: none;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    outline: black 3px solid;
+    background: #AAAAAA;
+    ;
 
-body{ 
-background: #3D4970;
 }
-button{
-  display: flex;
-  flex:1;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 50px;
-  font-weight: 50px;
-  width: 25%;
-  stroke: aquamarine;
-  background:#996666		;
-}
+@media only screen and (max-device-width : 750px) {
+    canvas{
+        width: auto;
+        height: 500px;
+    }
+    }
