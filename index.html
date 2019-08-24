@@ -17,9 +17,11 @@
 
         <button id="start">Press this button to start</button>
         <button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
+
         <canvas id="canvas" width="500" height="800"></canvas>
         <script src="./init.js"></script>
         <script src="./index.js"></script>
+
         <script>
             /* Get the element you want displayed in fullscreen mode (a video in this example): */
             var elem = document.getElementById("canvas");
@@ -32,7 +34,7 @@
                 } else if (elem.mozRequestFullScreen) { /* Firefox */
                     elem.mozRequestFullScreen();
                 } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                    elem.webkitRequestFullscreen();
+
                 } else if (elem.msRequestFullscreen) { /* IE/Edge */
                     elem.msRequestFullscreen();
                 }

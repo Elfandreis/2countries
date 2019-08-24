@@ -1,12 +1,11 @@
 let images = {};
-let spd = 2;
+
 
 //audio;
 let audio = [];
 
 let createenemy;
 let createbullet;
-let moveimage;
 
 let rateenem = 500;
 let ratefire = 250;
@@ -26,20 +25,18 @@ let timers = {
             createBullet();
             setTimeout(function () { that.bullet(); }, ratefire);
         }
-    }
-
+    },
 };
 
 function Timers(pause) {
     timers.pause = pause;
     timers.enemy();
     timers.bullet();
-
 }
 
 function preloadImages() {
-    let imageList = ["./img/player.png", "./img/mi.png", "./img/xxxt.png", "./img/bullet.png", "./img/heart.png", "./img/milos.png", "./img/prize.png", "./img/back.png"];
-    let imagename = ["billie", "migos", "xxxt", "bullet", "heart", "milos", "prize", "back"];
+    let imageList = ["./img/player.png", "./img/mi.png", "./img/xxxt.png", "./img/bullet.png", "./img/heart.png", "./img/milos.png", "./img/prize.png", "./img/back.png", "./img/1mou.png", "./img/2mou.png"];
+    let imagename = ["billie", "migos", "xxxt", "bullet", "heart", "milos", "prize", "back", "mo1", "mo2"];
 
     for (let i = 0; i < imageList.length; i++) {
         images[imagename[i]] = new Image();
@@ -50,18 +47,21 @@ function preloadAudio() {
     var audioList = ["./sound/bad guy.mp3", "./sound/skr.mp3", "./sound/bullet.mp3", "./sound/bullet2.mp3"];
     //do same thing as images
     audio[0] = new Sound(audioList[0], 1, 0.7);
-    audio[1] = new Sound(audioList[1], 3, 0.5);
-    audio[2] = new Sound(audioList[2], 20, 1);
+    audio[1] = new Sound(audioList[1], 3, 0.2);
+    audio[2] = new Sound(audioList[2], 20, 0.1);
     audio[3] = new Sound(audioList[3], 40, 1);
 
 }
 
 function Mousemov() {
-    document.addEventListener('mousemove', function (e) {  // use event argument
-        var rect = canvas.getBoundingClientRect();  // get element's abs. position
-        mouse.x = e.clientX - rect.left;              // get mouse x and adjust for el.
-        mouse.y = e.clientY - rect.top;               // get mouse y and adjust for el.
-    });
+    document.addEventListener('mousemove', function getMousePos(evt) {
+        var rect = canvas.getBoundingClientRect(), // abs. size of element
+            scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for X
+            scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for Y
+
+        mouse.x = (evt.clientX - rect.left) * scaleX;  // scale mouse coordinates after they have
+        mouse.y = (evt.clientY - rect.top) * scaleY;    // been adjusted to be relative to element
+    })
 }
 
 function collision(box1, box2) {
@@ -69,7 +69,7 @@ function collision(box1, box2) {
         && ((box1.y + box1.h > box2.y && box1.y < box2.y + box2.h) || (box1.y + box1.h < box2.h && box1.h > box2.y)));
 }
 
-function arraycollis(weapon, target) {
+function war(weapon, target) {
     for (let i = 0; i < weapon.length; i++) {
         for (let j = 0; j < target.length; j++) {
             if (weapon[i] == undefined) {
@@ -97,8 +97,13 @@ function createBullet() {
 }
 
 function createEnemy() {
-    let Enemy = new enemy(75, 75, 3, 50, 1);
+    let Enemy = new enemy(75, 75, 3, 50, 2);
     enemies.push(Enemy);
+}
+
+function createPoint() {
+    let Point = new prize(50, 0);
+    points.push(Point);
 }
 
 preloadImages();

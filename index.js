@@ -4,8 +4,7 @@ let ctx;
 let pl;
 let bullets = [];
 let enemies = [];
-let point = new prize(50, 50);
-
+let points = [];
 let mouse = {};
 let escores = [];
 
@@ -31,13 +30,12 @@ function refreshLoop() {
         refreshLoop();
     });
 }
-
 refreshLoop();
 
 var ui = {
     score: 0,
+    spd: 2,
     hearts: 16,
-    backy: 0,
     printscore: function () {
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
@@ -50,16 +48,17 @@ var ui = {
             Timers(pause);
             ctx.drawImage(images.milos, 0, 0, canvas.width, canvas.height);
         }
-        for (let i = 0; i < this.hearts; i++)
+        for (let i = 0; i < this.hearts; i++) {
             ctx.drawImage(images.heart, i * 75 + 10, 10, 50, 50);
+        }
     },
     background: function () {
-        this.backy++;
-        ctx.drawImage(images.back, 0, this.backy, canvas.width, canvas.height);
-        ctx.drawImage(images.back, 0, (-canvas.height) + this.backy, canvas.width, canvas.height);
-        if (this.backy > canvas.height) {
-            this.backy = 0;
-        }
+        this.spd += 0.3;
+        ctx.fillStyle = "#39CCCC";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(images.mo2, 0, 300 + this.spd);
+        ctx.drawImage(images.mo1, 0, 400 + this.spd * 1.1);
+
     },
     diescore: function (obj) {
         ctx.font = 30 + "px Verdana";
@@ -79,7 +78,7 @@ document.querySelector('button').addEventListener('click', function () {
 
 function gameStart() {
     init();
-    listener();
+    listeners();
     window.requestAnimationFrame(loop);
 }
 
@@ -87,9 +86,13 @@ function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     pl = new player(250, 800, 100, 100);
+
+    //music
     audio[0].play();
+
     Mousemov();
     Timers(false);
+    createPoint();
 }
 
 function loop() {
@@ -105,7 +108,7 @@ function loop() {
 function update() {
 
     pl.update();
-    point.update();
+
     for (let i = 0; i < bullets.length; i++) {
         bullets[i].update();
         if (bullets[i].hitupper()) {
@@ -119,13 +122,22 @@ function update() {
             enemies.splice(i, 1);
         }
     }
+    for (let i = 0; i < points.length; i++) {
+        points[i].update();
+    }
+
 }
 
 function collisions() {
-    if (collision(pl, point)) {
-        ui.score += 1000;
-        point.delay();
+    for (let i = 0; i < points.length; i++) {
+        points[i].draw(images.prize);
+
+        if (collision(pl, points[i])) {
+            ui.score += 1000;
+            points[i].delay();
+        }
     }
+
     for (let j = 0; j < enemies.length; j++) {
         if (collision(pl, enemies[j]) && pl.invi == false) {
             ui.hearts--;
@@ -133,7 +145,7 @@ function collisions() {
             enemies.splice(j, 1);
         }
     }
-    arraycollis(bullets, enemies);
+    war(bullets, enemies);
 }
 
 function draw() {
@@ -145,10 +157,12 @@ function draw() {
         enemies[i].draw(images.xxxt);
     }
 
-
     for (let i = 0; i < bullets.length; i++) {
         bullets[i].draw(images.bullet);
+    }
 
+    for (let i = 0; i < points.length; i++) {
+        points[i].draw(images.prize);
     }
 
     for (let i = 0; i < escores.length; i++) {
@@ -160,7 +174,6 @@ function draw() {
             escores.splice(i, 1);
         }
     }
-    point.draw(images.prize);
     pl.draw(images.billie);
 
     ui.printheart();
@@ -168,8 +181,9 @@ function draw() {
 
 }
 
-function listener() {
+function listeners() {
 
+    //pausing
     window.addEventListener('blur', function (e) {
         pause = true;
         Timers(pause);
@@ -182,10 +196,13 @@ function listener() {
         }
     });
 
+    //charge
     canvas.addEventListener("mousedown", function () {
         vb = 10;
         ratefire = 125;
     });
+
+    //back state
     canvas.addEventListener("mouseup", function () {
         vb = 5;
         ratefire = 250;

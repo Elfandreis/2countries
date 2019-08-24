@@ -7,7 +7,6 @@ class player {
         this.invi = false;
     }
     draw(img) {
-
         ctx.drawImage(img, this.x, this.y, this.w, this.h);
     }
     update() {
@@ -43,7 +42,7 @@ class enemy {
         this.w = w;
         this.h = h;
         this.y = -this.h;
-        this.x = Math.floor(Math.random() * (500 - this.w));
+        this.x = Math.floor(Math.random() * (canvas.width - this.w));
         this.lives = lives;
         this.score = score;
         this.op = 1;
@@ -51,7 +50,7 @@ class enemy {
     }
 
     update() {
-        this.y += spd;
+        this.y += this.spd;
     }
 
     draw(img) {
@@ -65,11 +64,11 @@ class enemy {
 class prize {
 
     constructor(x, y) {
-        this.x = x;
+
         this.y = y;
         this.w = 50;
         this.h = 50;
-        this.rand = this.x = Math.floor(Math.random() * (500 - this.w));
+        this.x = Math.floor(Math.random() * (canvas.width - this.w));
     }
 
 
@@ -84,15 +83,12 @@ class prize {
     draw(img) {
         ctx.drawImage(img, this.x, this.y, this.w, this.h);
     }
-    hitupper() {
-        return (this.y + 25 < 0);
-    }
+
     delay() {
-        this.x = -50;
-        this.y = -50;
+        this.x = Math.floor(Math.random() * (canvas.width - this.w));
+        this.y = -250;
         setTimeout(function () {
-            this.x = this.rand;
-            this.y = 0
+            this.y = -50;
         }, 2000);
     }
 
