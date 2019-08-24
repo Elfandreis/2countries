@@ -2,7 +2,7 @@ let images = {};
 
 
 //audio;
-let audio = [];
+let audios = {};
 
 let createenemy;
 let createbullet;
@@ -15,14 +15,17 @@ let timers = {
     enemy: function () {
         if (this.pause == false) {
             let that = this;
-            createEnemy();
+            let Enemy = new enemy(75, 75, 3, 50, 2);
+            enemies.push(Enemy);
             setTimeout(function () { that.enemy(); }, rateenem);
         }
     },
     bullet: function () {
         if (this.pause == false) {
             let that = this;
-            createBullet();
+            let Bullet = new bullet(pl, vb);
+            bullets.push(Bullet);
+            audios.bullet.play();
             setTimeout(function () { that.bullet(); }, ratefire);
         }
     },
@@ -44,12 +47,13 @@ function preloadImages() {
     }
 }
 function preloadAudio() {
-    var audioList = ["./sound/bad guy.mp3", "./sound/skr.mp3", "./sound/bullet.mp3", "./sound/bullet2.mp3"];
-    //do same thing as images
-    audio[0] = new Sound(audioList[0], 1, 0.7);
-    audio[1] = new Sound(audioList[1], 3, 0.2);
-    audio[2] = new Sound(audioList[2], 20, 0.1);
-    audio[3] = new Sound(audioList[3], 40, 1);
+    let audioList = ["./sound/bad guy.mp3", "./sound/skr.mp3", "./sound/bullet.mp3"];
+    let audioname = ["billie", "xxxt", "bullet"];
+    for (let i = 0; i < audioname.length; i++) {
+        if (!isNaN(audioname[i]))
+            continue;
+        audios[audioname[i]] = new Sound(audioList[i], 20, 0.5 ** i);
+    }
 
 }
 
@@ -69,7 +73,7 @@ function collision(box1, box2) {
         && ((box1.y + box1.h > box2.y && box1.y < box2.y + box2.h) || (box1.y + box1.h < box2.h && box1.h > box2.y)));
 }
 
-function war(weapon, target) {
+function bulenem(weapon, target) {
     for (let i = 0; i < weapon.length; i++) {
         for (let j = 0; j < target.length; j++) {
             if (weapon[i] == undefined) {
@@ -80,9 +84,10 @@ function war(weapon, target) {
                 weapon.splice(i, 1);
                 if (target[j].lives == 0) {
                     ui.score += target[j].score;
+                    target[j].op = 1;
                     escores.push(target[j]);
                     target.splice(j, 1);
-                    audio[1].play();
+                    audios.xxxt.play();
                 }
             }
         }
@@ -90,21 +95,24 @@ function war(weapon, target) {
 }
 
 
-function createBullet() {
-    let Bullet = new bullet(pl, vb);
-    bullets.push(Bullet);
-    audio[2].play();
-}
-
-function createEnemy() {
-    let Enemy = new enemy(75, 75, 3, 50, 2);
-    enemies.push(Enemy);
-}
-
 function createPoint() {
     let Point = new prize(50, 0);
     points.push(Point);
 }
+
+
+//fps
+
+let frameCount = 0;
+let fps, fpsInterval, startTime, now, then, elapsed, currentFps;
+
+function startAnimating(fps) {
+    fpsInterval = 1000 / fps;
+    then = window.performance.now();
+    startTime = then;
+    loop();
+}
+
 
 preloadImages();
 preloadAudio();

@@ -45,7 +45,7 @@ class enemy {
         this.x = Math.floor(Math.random() * (canvas.width - this.w));
         this.lives = lives;
         this.score = score;
-        this.op = 1;
+
         this.spd = spd;
     }
 
@@ -70,7 +70,6 @@ class prize {
         this.h = 50;
         this.x = Math.floor(Math.random() * (canvas.width - this.w));
     }
-
 
     update() {
         if (this.y + this.h > canvas.height + this.h) {

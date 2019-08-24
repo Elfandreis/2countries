@@ -15,32 +15,46 @@ let movei = 0;
 let vb = 5;
 
 
-//frame counters fps
-const times = [];
-let fps;
+let back = {
+    y: 0,
+    num: 0,
+    grd: 0,
+    colors: ["blue", "black ", "red", "green"],
+    update: function () {
+        this.y += 5;
+        this.grd = ctx.createLinearGradient(100, this.y, 100, 200 + this.y);
 
-function refreshLoop() {
-    window.requestAnimationFrame(() => {
-        const now = performance.now();
-        while (times.length > 0 && times[0] <= now - 1000) {
-            times.shift();
+        this.grd.addColorStop(1, "rgba(255,255,255,0)");
+        this.grd.addColorStop(0, this.colors[this.num + 1]);
+        if (this.y > canvas.height) {
+            this.y = 0;
+            this.num++;
+            if (this.num >= 3)
+                this.num = 0;
         }
-        times.push(now);
-        fps = times.length;
-        refreshLoop();
-    });
-}
-refreshLoop();
+    },
+    draw: function () {
+        ctx.fillStyle = this.colors[this.num];
+        ctx.fillRect(0, this.y, canvas.width, canvas.height);
+
+        ctx.fillStyle = this.colors[this.num + 1];
+        ctx.fillRect(0, this.y - canvas.height, canvas.width, canvas.height);
+
+        ctx.fillStyle = this.grd;
+        ctx.fillRect(0, this.y - 1, canvas.width, 200);
+
+    }
+};
 
 var ui = {
     score: 0,
     spd: 2,
     hearts: 16,
     printscore: function () {
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
         ctx.textAlign = "left";
         ctx.font = "40px Georgia"
-        ctx.fillText('Score ' + fps + ' ', 270, 40);
+        ctx.fillText('Score ' + currentFps + ' ', 270, 40);
     },
     printheart: function () {
         if (this.hearts <= 0) {
@@ -53,11 +67,9 @@ var ui = {
         }
     },
     background: function () {
-        this.spd += 0.3;
-        ctx.fillStyle = "#39CCCC";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        this.spd += 0.6;
         ctx.drawImage(images.mo2, 0, 300 + this.spd);
-        ctx.drawImage(images.mo1, 0, 400 + this.spd * 1.1);
+        ctx.drawImage(images.mo1, 0, 400 + this.spd * 0.8);
 
     },
     diescore: function (obj) {
@@ -78,6 +90,7 @@ document.querySelector('button').addEventListener('click', function () {
 
 function gameStart() {
     init();
+    startAnimating(120);
     listeners();
     window.requestAnimationFrame(loop);
 }
@@ -88,18 +101,37 @@ function init() {
     pl = new player(250, 800, 100, 100);
 
     //music
-    audio[0].play();
+    audios.billie.play();
 
     Mousemov();
     Timers(false);
+
     createPoint();
 }
 
-function loop() {
-    if (pause == false) {
-        update();
-        collisions();
-        draw();
+function loop(newtime) {
+
+    now = newtime;
+    elapsed = now - then;
+
+    // if enough time has elapsed, draw the next frame
+
+    if (elapsed > fpsInterval) {
+
+        // Get ready for next frame by setting then=now, but...
+        // Also, adjust for fpsInterval not being multiple of 16.67
+        then = now - (elapsed % fpsInterval);
+        // draw stuff here
+        if (pause == false) {
+            update();
+            collisions();
+            draw();
+        }
+
+        // TESTING...Report #seconds since start and achieved fps.
+        let sinceStart = now - startTime;
+        currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
+
     }
     window.requestAnimationFrame(loop);
 }
@@ -126,6 +158,7 @@ function update() {
         points[i].update();
     }
 
+
 }
 
 function collisions() {
@@ -145,12 +178,17 @@ function collisions() {
             enemies.splice(j, 1);
         }
     }
-    war(bullets, enemies);
+
+    bulenem(bullets, enemies);
 }
+
 
 function draw() {
     ctx.clearRect(0, 0, 500, 800);
 
+
+    back.update();
+    back.draw();
     ui.background();
 
     for (let i = 0; i < enemies.length; i++) {
@@ -174,6 +212,7 @@ function draw() {
             escores.splice(i, 1);
         }
     }
+
     pl.draw(images.billie);
 
     ui.printheart();
@@ -193,6 +232,7 @@ function listeners() {
         if (e.keyCode == 32) {
             pause = !pause;
             Timers(pause);
+
         }
     });
 
