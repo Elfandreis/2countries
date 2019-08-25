@@ -121,6 +121,7 @@ class bullet {
     }
 }
 
+
 function Sound(src, maxStreams = 1, vol = 1.0) {
     this.streamNum = 0;
     this.streams = [];
@@ -139,3 +140,4 @@ function Sound(src, maxStreams = 1, vol = 1.0) {
         this.streams[this.streamNum].currentTime = 0;
     }
 }
+

@@ -38,8 +38,8 @@ function Timers(pause) {
 }
 
 function preloadImages() {
-    let imageList = ["./img/player.png", "./img/mi.png", "./img/xxxt.png", "./img/bullet.png", "./img/heart.png", "./img/milos.png", "./img/prize.png", "./img/back.png", "./img/1mou.png", "./img/2mou.png"];
-    let imagename = ["billie", "migos", "xxxt", "bullet", "heart", "milos", "prize", "back", "mo1", "mo2"];
+    let imageList = ["./img/player.png", "./img/cat.png", "./img/xxxt.png", "./img/bullet.png", "./img/heart.png", "./img/milos.png", "./img/prize.png", "./img/back.png", "./img/1mou.png", "./img/2mou.png"];
+    let imagename = ["billie", "cat", "xxxt", "bullet", "heart", "milos", "prize", "back", "mo1", "mo2"];
 
     for (let i = 0; i < imageList.length; i++) {
         images[imagename[i]] = new Image();
@@ -47,11 +47,9 @@ function preloadImages() {
     }
 }
 function preloadAudio() {
-    let audioList = ["./sound/bad guy.mp3", "./sound/skr.mp3", "./sound/bullet.mp3"];
-    let audioname = ["billie", "xxxt", "bullet"];
-    for (let i = 0; i < audioname.length; i++) {
-        if (!isNaN(audioname[i]))
-            continue;
+    let audioList = ["./sound/bad guy.mp3", "./sound/laser.mp3", "./sound/skr.mp3", "./sound/bullet.mp3",];
+    let audioname = ["billie", "laser", "xxxt", "bullet",];
+    for (let i = 0; i < audioList.length; i++) {
         audios[audioname[i]] = new Sound(audioList[i], 20, 0.5 ** i);
     }
 

@@ -99,7 +99,7 @@ function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     pl = new player(250, 800, 100, 100);
-
+    laser = new Laser(pl);
     //music
     audios.billie.play();
 
@@ -141,6 +141,7 @@ function update() {
 
     pl.update();
 
+
     for (let i = 0; i < bullets.length; i++) {
         bullets[i].update();
         if (bullets[i].hitupper()) {
@@ -157,6 +158,7 @@ function update() {
     for (let i = 0; i < points.length; i++) {
         points[i].update();
     }
+    laser.update(pl);
 
 
 }
@@ -175,9 +177,13 @@ function collisions() {
         if (collision(pl, enemies[j]) && pl.invi == false) {
             ui.hearts--;
             pl.invis();
+
+        }
+        if (collision(laser, enemies[j])) {
             enemies.splice(j, 1);
         }
     }
+
 
     bulenem(bullets, enemies);
 }
@@ -214,7 +220,8 @@ function draw() {
     }
 
     pl.draw(images.billie);
-
+    pl.draw(images.cat);
+    laser.draw();
     ui.printheart();
     ui.printscore();
 
@@ -240,12 +247,34 @@ function listeners() {
     canvas.addEventListener("mousedown", function () {
         vb = 10;
         ratefire = 125;
+        audios.laser.play();
+        laser.start = true;
+
     });
 
     //back state
     canvas.addEventListener("mouseup", function () {
         vb = 5;
         ratefire = 250;
+        laser.start = false;
+
     });
 }
 
+function Laser(obj) {
+    this.w = 20;
+    this.y = 0;
+    this.h = obj.y;
+    this.x = obj.x + obj.w / 2 - this.w / 2;
+    this.draw = function () {
+        if (this.start == true) {
+            ctx.fillStyle = '#FFFF77';
+            ctx.fillRect(this.x, this.y, this.w, this.h);
+        }
+    }
+    this.update = function (pl) {
+        this.h = pl.y;
+        this.x = pl.x + pl.w / 2 - this.w / 2;
+    }
+
+}
