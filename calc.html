@@ -8,8 +8,7 @@
 <body>
 
     <h2>Aproximare functie continua</h2>
-    <p>Ecuatia</p>
-
+    <p id="ec"></p>
     <p id="result"></p>
 
     <pre>
@@ -19,18 +18,24 @@
         var b = Number(prompt("b"));
         var expr = prompt("Ecuatia", "x^3-3x+1");
         var tries = Number(prompt("Repetari", 10));
-        var sens = prompt("sens", 0);
+        let sens;
         const node = math.parse(expr);
         const code = node.compile();
 
+        document.getElementById("ec").innerHTML = "Intervalul (" + a + "," + b + ")";
         let scope = {
             x: 0
         }; document.writeln();
-        let fin = rez(a, b, 0);
 
+        scope.x = a;
+        if (code.evaluate(scope) > 0)
+            sens = 0;
+        else
+            sens = 1;
+        let fin = rez(a, b, 0);
         function rez(first, last, n) {
             scope.x = (first + last) / 2;
-            console.log(scope);
+
             document.writeln(scope.x + "   " + code.evaluate(scope));
             if (code.evaluate(scope) == 0 || n >= tries)
                 return (first + last) / 2;
