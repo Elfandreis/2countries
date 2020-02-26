@@ -14,6 +14,7 @@ let movei = 0;
 
 let vb = 5;
 
+let dt = 20;
 
 let back = {
     y: 0,
@@ -179,9 +180,10 @@ function collisions() {
             pl.invis();
 
         }
-        if (collision(laser, enemies[j])) {
-            enemies.splice(j, 1);
-        }
+        if (laser.start == true)
+            if (collision(laser, enemies[j])) {
+                enemies.splice(j, 1);
+            }
     }
 
 

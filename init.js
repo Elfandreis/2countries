@@ -101,6 +101,9 @@ function createPoint() {
 
 //fps
 
+preloadImages();
+preloadAudio();
+
 let frameCount = 0;
 let fps, fpsInterval, startTime, now, then, elapsed, currentFps;
 
@@ -111,6 +114,3 @@ function startAnimating(fps) {
     loop();
 }
 
-
-preloadImages();
-preloadAudio();

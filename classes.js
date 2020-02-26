@@ -50,7 +50,7 @@ class enemy {
     }
 
     update() {
-        this.y += this.spd;
+        this.y += this.spd * dt;
     }
 
     draw(img) {
@@ -76,7 +76,7 @@ class prize {
             this.y = 0;
             this.x = this.rand;
         }
-        this.y += 1;
+        this.y += 1 * dt;
     }
 
     draw(img) {
@@ -103,7 +103,7 @@ class bullet {
         this.x = obj.x + obj.w / 2 - this.w / 2;
     }
     update() {
-        this.y -= this.v;
+        this.y -= this.v * dt;
 
     }
     draw(img) {

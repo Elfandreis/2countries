@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.0/math.js"></script>
+</head>
+
+<body>
+
+    <h2>Aproximare functie continua</h2>
+    <p>Ecuatia</p>
+
+    <p id="result"></p>
+
+    <pre>
+    <script>
+
+        var a = Number(prompt("a"));
+        var b = Number(prompt("b"));
+        var expr = prompt("Ecuatia", "x^3-3x+1");
+        var tries = Number(prompt("Repetari", 10));
+        var sens = prompt("sens", 0);
+        const node = math.parse(expr);
+        const code = node.compile();
+
+        let scope = {
+            x: 0
+        }; document.writeln();
+        let fin = rez(a, b, 0);
+
+        function rez(first, last, n) {
+            scope.x = (first + last) / 2;
+            console.log(scope);
+            document.writeln(scope.x + "   " + code.evaluate(scope));
+            if (code.evaluate(scope) == 0 || n >= tries)
+                return (first + last) / 2;
+            else if (sens == 0) {
+                if (code.evaluate(scope) > 0)
+                    return rez((first + last) / 2, last, n + 1);
+                else if (code.evaluate(scope) < 0)
+                    return rez(first, (first + last) / 2, n + 1);
+            }
+            else if (sens == 1) {
+                if (code.evaluate(scope) < 0)
+                    return rez((first + last) / 2, last, n + 1);
+                else if (code.evaluate(scope) > 0)
+                    return rez(first, (first + last) / 2, n + 1);
+            }
+
+        }
+        scope.x = fin;
+        document.getElementById("result").innerHTML = node;
+
+    </script>
+</pre>
+
+</body>
+
+</html>
