@@ -36,8 +36,8 @@
         function rez(first, last, n) {
             scope.x = (first + last) / 2;
 
-            document.writeln(scope.x + "   " + code.evaluate(scope));
-            if (code.evaluate(scope) == 0 || n >= tries)
+            document.writeln(scope.x + "   " + code.evaluate(scope) + " " + first +" "+last);
+            if (code.evaluate(scope) == 0 || n >= tries) 
                 return (first + last) / 2;
             else if (sens == 0) {
                 if (code.evaluate(scope) > 0)
